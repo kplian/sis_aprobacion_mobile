@@ -57,15 +57,32 @@ function generate(element) {
     );
   }
 
-const listOptions = [
-    { icon: <ThumbDownAlt style={{ color: red[500] }}/>, name: 'Dev. al Solicitante'},
-    { icon: <ThumbDownAlt style={{ color: yellow[500] }}/>, name: 'Rechazar' },
-    { icon: <ThumbUpAlt style={{ color: green[500] }}/>, name: 'Siguiente Estado' },
-    { icon: <Close style={{ color: red[500] }}/>, name: 'Cerrar' },
-]
+
   
 
-export const ListTable = () => {
+export const ListTable = ({ handleOpens }) => {
+    const listOptions = [
+        { 
+          icon: <ThumbDownAlt style={{ color: red[500] }}/>, 
+          name: 'Dev. al Solicitante',
+          action: handleOpens.refused
+        },
+        { 
+          icon: <ThumbDownAlt style={{ color: yellow[500] }}/>, 
+          name: 'Rechazar',
+          action: handleOpens.refused
+        },
+        { 
+          icon: <ThumbUpAlt style={{ color: green[500] }}/>, 
+          name: 'Siguiente Estado',
+          action: handleOpens.accept
+        },
+        { 
+          icon: <Close style={{ color: red[500] }}/>, 
+          name: 'Cerrar' 
+        },
+    ];
+
     const classes = useStyles();
     const [dense, setDense] = useState(false);
     const [secondary, setSecondary] = useState(false);
@@ -97,7 +114,7 @@ export const ListTable = () => {
     >
       <List className={ classes.drawer }>
         {listOptions.map((item, index) => (
-          <ListItem button key={item.name}>
+          <ListItem button key={item.name} onClick={ item.action }>
             <ListItemIcon color="danger">{ item.icon }</ListItemIcon>
             <ListItemText primary={item.name} />
           </ListItem>
@@ -115,8 +132,8 @@ export const ListTable = () => {
           <div className={classes.demo}>
             <List dense={dense}>
                 <Divider/>
-              {data.map( (item, index) =>(<div>
-                <ListItem button={true} onClick={ ()=> handleClick(index)}>
+              {data.map( (item, index) =>(<div key={index} >
+                <ListItem button onClick={ ()=> handleClick(index)}>
                     <ListItemIcon>
                         <ExpandMore />
                     </ListItemIcon>
