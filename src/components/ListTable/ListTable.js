@@ -6,19 +6,14 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { DeleteIcon, MoreVert, Close, ThumbDownAlt, ThumbUpAlt, ExpandMore } from '@material-ui/icons/index';
+import { MoreVert, ExpandMore } from '@material-ui/icons/index';
 import FolderIcon from '@material-ui/icons/Folder';
 import Divider from '@material-ui/core/Divider';
 /////
 import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import { red, green, yellow } from '@material-ui/core/colors';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 
@@ -49,39 +44,8 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function generate(element) {
-    return data.map(value =>
-      React.cloneElement(element, {
-        key: value,
-      }),
-    );
-  }
 
-
-  
-
-export const ListTable = ({ handleOpens }) => {
-    const listOptions = [
-        { 
-          icon: <ThumbDownAlt style={{ color: red[500] }}/>, 
-          name: 'Dev. al Solicitante',
-          action: handleOpens.refused
-        },
-        { 
-          icon: <ThumbDownAlt style={{ color: yellow[500] }}/>, 
-          name: 'Rechazar',
-          action: handleOpens.refused
-        },
-        { 
-          icon: <ThumbUpAlt style={{ color: green[500] }}/>, 
-          name: 'Siguiente Estado',
-          action: handleOpens.accept
-        },
-        { 
-          icon: <Close style={{ color: red[500] }}/>, 
-          name: 'Cerrar' 
-        },
-    ];
+export const ListTable = ({ handleOpens, actions }) => {
 
     const classes = useStyles();
     const [dense, setDense] = useState(false);
@@ -113,7 +77,7 @@ export const ListTable = ({ handleOpens }) => {
       onKeyDown={toggleDrawer(side, false)}
     >
       <List className={ classes.drawer }>
-        {listOptions.map((item, index) => (
+        {actions.map((item, index) => (
           <ListItem button key={item.name} onClick={ item.action }>
             <ListItemIcon color="danger">{ item.icon }</ListItemIcon>
             <ListItemText primary={item.name} />
@@ -139,7 +103,8 @@ export const ListTable = ({ handleOpens }) => {
                     </ListItemIcon>
                   <ListItemText
                     primary={<React.Fragment>
-                        <Box display="flex">
+                        <Box display="flex"
+                             flexWrap="wrap">
                             <Box flexGrow={1}>
                                 <Typography
                                 component="span"

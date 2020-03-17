@@ -1,7 +1,8 @@
 import React, {useContext, useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import {clientRestPxp} from "clientpxpjs/js/clientRestPxp";
-import {md5} from "clientpxpjs/js/md5";
+// import {clientRestPxp} from "clientpxpjs/js/clientRestPxp";
+import { clientRestPxp } from '../../libs/clientpxpjs/js/clientRestPxp';
+import {md5} from "../../libs/clientpxpjs/js/md5";
 import { UserContext } from './UserContext';
 
 import CssBaseline from '@material-ui/core/CssBaseline';

@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,13 +21,13 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './ListItems';
+import { MenuItems, secondaryListItems } from './ListItems';
 import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
-import { Route } from 'react-router-dom';
-import App from '../../App';
-import { red } from '@material-ui/core/colors';
+
+import { updateLocation } from '../../redux/actions/app';
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -120,13 +123,22 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Dashboard( props ) {
-    
+const Dashboard = ( props ) => {
+  const history = useHistory();
+
+  history.listen((location, action) => {
+    let page = location.pathname.replace('/', '');
+    page = page === '' ? 'Dashboard' : page;
+    page = page.charAt(0).toLocaleUpperCase() + page.slice(1).toLowerCase();
+    props.dispatch( updateLocation( page ));
+  });
+
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+  
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -147,7 +159,7 @@ export default function Dashboard( props ) {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Dashboard
+            { props.app.page }
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -157,7 +169,7 @@ export default function Dashboard( props ) {
         </Toolbar>
       </AppBar>
       <Drawer
-        variant="permanent"
+        variant="temporary"
         classes={{
           paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
         }}
@@ -169,7 +181,9 @@ export default function Dashboard( props ) {
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems}</List>
+        <List>
+          <MenuItems/>
+        </List>
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>
@@ -204,4 +218,12 @@ export default function Dashboard( props ) {
       </main>
     </div>
   );
-}
+};
+
+const mapStateToProps = ( state ) => {
+  return {
+      app: state.app
+  }
+};
+
+export default connect( mapStateToProps )(Dashboard);
