@@ -15,6 +15,9 @@
 import {Base64} from './base64.js';
 import {mcrypt} from './mcrypt.js';
 
+// cryptoJS lib
+import { CryptoJSAesEncrypt } from './crypto';
+
 class clientRestPxp {
 
     constructor(url,typeUrl, port = 80, file = 'kerp', protocol = 'http') {
@@ -52,6 +55,8 @@ class clientRestPxp {
         var params = new URLSearchParams();
         params.append('usuario', this.user);
         params.append('contrasena', this._user);
+        console.log('p', params);
+        
         fetch(this._urlRequest('seguridad/Auten/verificarCredenciales'), {
             method: 'POST',
             body: params,
@@ -61,9 +66,15 @@ class clientRestPxp {
         }).then(res => res.text())
             .catch(error => console.log('Error:', error))
             .then(response => {
-                let obj = eval('(' + response + ')');
-                let json = JSON.parse(JSON.stringify(obj));
-                verifyCallback(json)
+                console.log('resp', response);
+                if( response ) {
+                    let obj = eval('(' + response + ')');
+                    let json = JSON.parse(JSON.stringify(obj));
+                    verifyCallback(json)
+                }
+                else {
+                    verifyCallback(null)
+                }
             });
 
     }
@@ -132,7 +143,9 @@ class clientRestPxp {
     genHeaders() {
         var prefix = this.uniqid('pxp');
         this.pxp = true;
-        this._user = this.fnEncrypt(prefix + '$$' + this.user, this.pass);
+        // this._user = this.fnEncrypt(prefix + '$$' + this.user, this.pass);
+        this._user = this.pass;
+        // this._user = CryptoJSAesEncrypt( 'pxp$$' + this.user, this.pass);
         // this._pass = this.fnEncrypt(prefix + '$$' + this.pass, this.pass);
 
         this.addHeader({"Pxp-user": this.user});

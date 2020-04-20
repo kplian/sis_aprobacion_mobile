@@ -41,6 +41,8 @@ const AppRouter = () => {
     useEffect(() => {
         let auth = JSON.parse(localStorage.getItem('auth'));
         if( auth ) {
+            console.log(auth);
+            
             setUserContext(auth);
         }
     }, []); 

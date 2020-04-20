@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import ThemeButton from './ThemeButton';
+import { ThemeContext } from './main-context';
 
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -22,11 +24,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { MenuItems, secondaryListItems } from './ListItems';
+
 import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
 
 import { updateLocation } from '../../redux/actions/app';
+import { useWindowSize } from './resize-window';
 
 function Copyright() {
   return (
@@ -48,6 +52,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
   },
   toolbar: {
+    backgroundColor: theme.palette.grey.A400,
     paddingRight: 24, // keep right padding when drawer closed
   },
   toolbarIcon: {
@@ -55,7 +60,7 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: '0 8px',
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.secondary.light,
     ...theme.mixins.toolbar,
   },
   appBar: {
@@ -83,6 +88,8 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
   drawerPaper: {
+    backgroundColor: theme.palette.grey.A400,
+    color: theme.palette.grey[50],
     position: 'relative',
     whiteSpace: 'nowrap',
     width: drawerWidth,
@@ -107,9 +114,11 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     height: '100vh',
     overflow: 'auto',
+    backgroundColor: theme.palette.grey[300],
   },
   container: {
-    padding: theme.spacing(1),
+    padding: theme.spacing(2),
+    // height: '100vh',
     // paddingBottom: theme.spacing(0),
   },
   paper: {
@@ -125,6 +134,9 @@ const useStyles = makeStyles(theme => ({
 
 const Dashboard = ( props ) => {
   const history = useHistory();
+  const { isThemeLight, setIsThemeLight } = useContext(ThemeContext);
+  const [ width, height ] = useWindowSize();
+  console.log(width, height)
 
   history.listen((location, action) => {
     let page = location.pathname.replace('/', '');
@@ -143,6 +155,10 @@ const Dashboard = ( props ) => {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  
+  const changeTheme = () => {
+    setIsThemeLight(!isThemeLight);
+  };
 
   return (
     <div className={classes.root}>
@@ -166,10 +182,11 @@ const Dashboard = ( props ) => {
               <NotificationsIcon />
             </Badge>
           </IconButton>
+          <ThemeButton onClick={changeTheme}/>
         </Toolbar>
       </AppBar>
       <Drawer
-        variant="temporary"
+        variant="persistent"
         classes={{
           paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
         }}

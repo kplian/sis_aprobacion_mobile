@@ -5,7 +5,7 @@ import { UserContext } from '../pages/Auth/UserContext';
 // pages
 import App from '../App';
 import { Adquisiciones } from '../pages/Adquisiciones/Adquisiciones';
-
+import TableDemo from '../pages/Dashboard/Table';
 
 function PrivateRoute({ children, ...rest }) {
     const {userContext} = useContext(UserContext);
@@ -31,7 +31,7 @@ const AppChildRoutes = () => {
         <Route component={({ match }) =>
             <div>
                 <PrivateRoute path="/" exact>
-                    <App/>
+                    <TableDemo/>
                 </PrivateRoute>
                 <PrivateRoute path="/adquisiciones" >
                     <Adquisiciones/>

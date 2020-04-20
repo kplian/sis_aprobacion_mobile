@@ -15,6 +15,7 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { NavLink, Link } from 'react-router-dom';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,9 +24,17 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
   },
   nested: {
-    paddingLeft: theme.spacing(5),
-    wordWrap: 'break-word'
+    // paddingLeft: theme.spacing(1),
+    wordWrap: 'break-word',
+    backgroundColor: theme.palette.grey[800],
   },
+  navlink: {
+    color: theme.palette.grey[50],
+    textDecoration: 'none'
+  },
+  icon: {
+    color: theme.palette.secondary.light,
+  }
 }));
 
 export const MenuItems = ( ) => {
@@ -39,46 +48,61 @@ export const MenuItems = ( ) => {
   return (
   <div>
   
-  <NavLink to="/">
+  <NavLink to="/" className={ classes.navlink }>
     <ListItem button>
       <ListItemIcon>
-        <DashboardIcon />
+        <DashboardIcon className={ classes.icon }/>
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItem>
   </NavLink>
   <ListItem button  onClick={handleClick}>
       <ListItemIcon>
-          <ShoppingCartIcon />
+          <ShoppingCartIcon className={ classes.icon }/>
       </ListItemIcon>
       <ListItemText primary="Adquisiciones" />
       {open ? <ExpandLess /> : <ExpandMore />}
   </ListItem>
   <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <NavLink to="/adquisiciones">
+          <NavLink to="/adquisiciones"  className={ classes.navlink }>
             <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <ArrowRightIcon className={ classes.icon }/>
+              </ListItemIcon>
               <ListItemText primary="Visto Bueno Solicitud" />
             </ListItem>
           </NavLink>
+          <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <ArrowRightIcon className={ classes.icon }/>
+              </ListItemIcon>
+              <ListItemText primary="Submenu 2" />
+          </ListItem>
+          <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <ArrowRightIcon className={ classes.icon }/>
+              </ListItemIcon>
+              <ListItemText primary="Submenu 3" />
+            </ListItem>
         </List>
   </Collapse>
         
     <ListItem button>
       <ListItemIcon>
-        <PeopleIcon />
+        <PeopleIcon className={ classes.icon }/>
       </ListItemIcon>
       <ListItemText primary="Usuarios" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
-        <BarChartIcon />
+        <BarChartIcon className={ classes.icon }/>
       </ListItemIcon>
       <ListItemText primary="Reports" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
-        <LayersIcon />
+        <LayersIcon className={ classes.icon }/>
       </ListItemIcon>
       <ListItemText primary="Integrations" />
     </ListItem>
@@ -91,19 +115,19 @@ export const secondaryListItems = (
     <ListSubheader inset>Saved reports</ListSubheader>
     <ListItem button>
       <ListItemIcon>
-        <AssignmentIcon />
+        <AssignmentIcon/>
       </ListItemIcon>
       <ListItemText primary="Current month" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
-        <AssignmentIcon />
+        <AssignmentIcon/>
       </ListItemIcon>
       <ListItemText primary="Last quarter" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
-        <AssignmentIcon />
+        <AssignmentIcon/>
       </ListItemIcon>
       <ListItemText primary="Year-end sale" />
     </ListItem>

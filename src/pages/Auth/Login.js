@@ -1,7 +1,7 @@
 import React, {useContext, useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 // import {clientRestPxp} from "clientpxpjs/js/clientRestPxp";
-import { clientRestPxp } from '../../libs/clientpxpjs/js/clientRestPxp';
+import { clientPxp, clientPxp2 } from '../../libs/sdk/config';
 import {md5} from "../../libs/clientpxpjs/js/md5";
 import { UserContext } from './UserContext';
 
@@ -138,17 +138,26 @@ export default function SignIn() {
 
         console.log(` user ${user} password ${password}`)
 
-        let client = new clientRestPxp('admin.disydes.com', 'DOMAIN');
-        // let client = new clientRestPxp('192.168.0.110/kerp', 'DOMAIN');
-        client.setCredentialsPxp(user, md5(password));
-        client.genHeaders();
+        // let client = new clientRestPxp('admin.disydes.com', 'DOMAIN');
+        // let client = new clientRestPxp('3.133.135.231/kerp20201', 'DOMAIN');
+        
+        const prom = clientPxp2.authenticate('admin', 'admin');
+          prom.then(resp => {
+            console.log('2LOGINN:',resp);
+            localStorage.setItem('auth', JSON.stringify({...resp, client: clientPxp2, username:user}));
+            setUserContext({...resp, client: clientPxp2, username:user});
+            history.replace(from);
+        });
+ 
+        clientPxp.setCredentialsPxp(user, md5(password));
+        clientPxp.genHeaders();
 
-        client.verifyUser(function (resp) {
-            if(resp.success) {
-                localStorage.setItem('auth', JSON.stringify({...resp, client, username:user}));
-                setUserContext({...resp, client, username:user});
-                history.replace(from);
-            }
+        clientPxp.verifyUser(function (resp) {
+            // if(resp.success) {
+            //     localStorage.setItem('auth', JSON.stringify({...resp, client: clientPxp, username:user}));
+            //     setUserContext({...resp, client: clientPxp, username:user});
+            //     history.replace(from);
+            // }
         });
     };
 
